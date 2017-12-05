@@ -2,11 +2,11 @@
 #include<fstream>
 #include<string>
 #include<cstdlib>
-#include<iomanip>
 #include<cstring>
+#include<iomanip>
 #include<vector>
 using namespace std;
-/*proto*/
+/*declaration*/
 void getToken(ifstream& in);
 /*global variables*/
 unsigned int ROW,CNT;
