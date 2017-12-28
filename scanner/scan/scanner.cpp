@@ -1,17 +1,16 @@
 /*************************************************************************
 	> File Name: scanner.cpp
-	> Author: 
+	> Author: liuyiwen
 	> Mail: 
 	> Created Time: 2017年11月22日 星期三 14时53分25秒
  ************************************************************************/
 
-#include<iostream>
-#include<fstream>
-#include<string>
-#include<cstdlib>
-#include<iomanip>
-#include<cstring>
-#include<vector>
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <cstdlib>
+#include <iomanip>
+#include <vector>
 using namespace std;
 
 /*proto*/
