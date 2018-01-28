@@ -1,17 +1,21 @@
-#define _GLOBAL_DEFINE_
+#define EXTERN
 #include "head.h"
 
-/*global variables*/
-ifstream in;
-unsigned int ROW,CNT;
-string operators = "+ - \\ * / = % : | , > _ < (){}[] \" ' ;";
-char CurrentChar = ' ';
-string Identifier;/*记录当前的标识*/
-double Number;/*记录当前的数字*/
-char Operator;/*记录当前的操作符号*/
-std::map<char, int>BinopPrecedence;
-TokenType CurrentToken;
+/*
+ *[>global variables<]
+ *ifstream in;
+ *unsigned int ROW,CNT;
+ *string operators = "+ - \\ * / = % : | , > _ < (){}[] \" ' ;";
+ *char CurrentChar = ' ';
+ *string Identifier;[>记录当前的标识<]
+ *double Number;[>记录当前的数字<]
+ *char Operator;[>记录当前的操作符号<]
+ *map<char, int> BinopPrecedence;
+ *TokenType CurrentToken;
+ */
 
+char CurrentChar = ' ';
+string operators = "+ - \\ * / = % : | , > _ < (){}[] \" ' ;";
 TokenType  getToken(ifstream& in)/*{{{*/
 {
     string str= "";
@@ -229,7 +233,7 @@ int initialize()
      *cout << ">>>请输入要分析的文件名字: " << "\n\t>" ; 
      *getline(cin,filename);
      */
-    in.open(filename.c_str());
+    in.open(filename);
     if(!in) {
         cout << "\e[31mError open " << filename << "\e[0m" << endl;
         exit(-1);

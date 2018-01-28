@@ -25,40 +25,43 @@ enum TokenType{
     tok_eof = -1,
     tok_err = 0
 };
-    class ExprAST {
-        public:
-        virtual ~ExprAST() {}
-    };
-    class NumberExpr : public ExprAST {
-        public:
-        double value;
-        NumberExpr(double val) : value(val) {}
-    };
-    class VariableExprAST : public ExprAST {
-        public:
-        string Name;
-        VariableExprAST(const string &name) : Name(name) {}
-    };
-    class BinaryExprAST : public ExprAST {
-        public:
-        char op;
-        ExprAST *LHS,*RHS;
-        BinaryExprAST(char op, ExprAST *lhs, ExprAST *rhs) :
-        op(op),LHS(lhs),RHS(rhs) {}
-    };
-    /*class CallExprAST : public ExprAST {
-    }*/
+class ExprAST {
+public:
+    virtual ~ExprAST() {}
+};
+class NumberExpr : public ExprAST {
+public:
+    double value;
+    NumberExpr(double val) : value(val) {}
+};
+class VariableExprAST : public ExprAST {
+public:
+    string Name;
+    VariableExprAST(const string &name) : Name(name) {}
+};
+class BinaryExprAST : public ExprAST {
+public:
+    char op;
+    ExprAST *LHS,*RHS;
+    BinaryExprAST(char op, ExprAST *lhs, ExprAST *rhs) :
+    op(op),LHS(lhs),RHS(rhs) {}
+};
+/*class CallExprAST : public ExprAST {
+}*/
 
 /*globalVariable*/
-#ifndef _GLOBAL_DEFINE_
-extern string Identifier;
-extern char Operator;
-extern double Number;
-extern char CurrentChar;
-extern ifstream in;
-extern unsigned int ROW,CNT;
-extern TokenType CurrentToken;
+#ifndef EXTERN
+#define EXTERN extern
 #endif
+EXTERN string Identifier;
+EXTERN char Operator;
+EXTERN double Number;
+EXTERN ifstream in;
+EXTERN unsigned int ROW,CNT;
+EXTERN TokenType CurrentToken;
+EXTERN map<char, int> BinopPrecedence;
+EXTERN char reg_number ;
+
 
 /*prototype*/
 /*parser.cpp*/
@@ -73,6 +76,7 @@ static TokenType getNextToken();
 void disp();
 void dispExpressPre(ExprAST *node);
 void dispExpressMid(ExprAST *node);
+void dispExpressPost(ExprAST *node);
 int maxDepthOf(ExprAST *node);
 void printPretty(ExprAST *root, int level, int indentSpace, ostream& out);
 #endif

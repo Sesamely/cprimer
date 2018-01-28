@@ -17,7 +17,7 @@
 using namespace std;
 
 
-int main(int argv, char **args) 
+int main1(int argv, char **args) 
 {
     string word;
     map<string, size_t> word_count;
@@ -44,5 +44,13 @@ int main(int argv, char **args)
         cout << wc.first << " \t\t\t\t\toccurs\t\t " << wc.second << (wc.second > 1 ? " times" : " time") << endl;
     }
     cout << "words number is: " << word_count.size() << endl;
+    return 0;
+}
+
+
+int main()
+{
+    string s("liuyiwemasafsdfsddfafsfca");
+    cout << sizeof(s) << endl;
     return 0;
 }

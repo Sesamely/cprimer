@@ -43,6 +43,22 @@ void dispExpress2(ExprAST *node)
         cout << ((VariableExprAST*)node)->Name ;
     } 
 }
+void dispExpress3(ExprAST *node)
+{
+    if (node!=NULL&&typeid(*node)==typeid(BinaryExprAST)) {
+        dispExpress3(((BinaryExprAST*)node)->LHS);
+        dispExpress3(((BinaryExprAST*)node)->RHS);
+        string s;
+        switch (dynamic_cast<BinaryExprAST*>(node)->op) {
+            case '+': s = "add"; break;
+            case '-': s = "sub"; break;
+            case '*': s = "mul"; break;
+            case '/': s = "div"; break;
+            case '=': s = "mov"; break;
+            default: cerr << "operator error!" << endl; return ;
+        }
+    }
+}
 void dispExpressPre(ExprAST *node) {
     dispExpress1(node);
     cout << endl ;
@@ -51,11 +67,16 @@ void dispExpressMid(ExprAST *node) {
     dispExpress2(node);
     cout << endl;
 }
+void dispExpressPost(ExprAST *node) {
+    reg_number = '0';
+    dispExpress3(node);
+    cout << endl;
+}
 
 int maxDepthOf(ExprAST *node)
 {
     if(!node) return 0;
-    if(typeid(*node)==typeid(NumberExpr)|| \
+    if(typeid(*node)==typeid(NumberExpr)|| 
         typeid(*node)==typeid(VariableExprAST)) return 1;
     int leftDepth = maxDepthOf(((BinaryExprAST*)node)->LHS);
     int rightDepth = maxDepthOf(((BinaryExprAST*)node)->RHS);
