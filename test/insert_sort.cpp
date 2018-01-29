@@ -21,20 +21,25 @@ void ir(vector<int> &v, int sz) {
         --i;
     }
 }
-void irD(vector<int> &v) {
+
+void insert_sort(vector<int> &v) {
     if (v.size() < 2) return;
+    int cnt = 0;
     unsigned int i = 1;
     for (; i<v.size(); ++i) {
         int key = v[i];
         int j = i ;
-        while (j>0 && v[j-1] < key) {
+        while (j>0 && v[j-1] > key) {
             v[j] = v[j-1];
             --j;
+            ++cnt;
         }
         v[j] = key;
-        for(const auto &i:v) cout << i << ' '; cout << endl;
+        //for(const auto &i:v) cout << i << ' '; cout << endl;
     }
+    cout << "times: " << cnt << endl;
 }
+
 int main() 
 {
     int integer;
@@ -42,7 +47,7 @@ int main()
     while (cin >> integer) {
         a.push_back(integer);
     }
-    irD(a);
+    insert_sort(a);
     for (const auto &i : a) {
         cout << i << ' ';
     }

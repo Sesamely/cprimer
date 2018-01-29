@@ -10,6 +10,7 @@
 using namespace std;
 
 
+int cnt;
 void merge(vector<int> &v, int p, int q, int r)
 {
     vector<int> v1, v2;
@@ -22,8 +23,16 @@ void merge(vector<int> &v, int p, int q, int r)
     v2.push_back(static_cast<int>(~(1<<31)));
     i = j = 0;
     for (k=p; k<=r; ++k) {
-        v[k] = v1[i] <= v2[j] ? v1[i++] : v2[j++];
+        //v[k] = v1[i] <= v2[j] ? v1[i++] : v2[j++];
+        if (v1[i] <= v2[j]) {
+            v[k] = v1[i++];
+        }
+        else {
+            v[k] = v2[j++];
+            cnt += v1.size()-1-i;
+        }
     } 
+    //for (const auto &i:v) cout << i << ' '; cout << endl; 
 }
 
 void reduce(vector<int>& v, int p, int q)
@@ -35,9 +44,9 @@ void reduce(vector<int>& v, int p, int q)
     merge(v, p, mid, q);
 }
 
-void reduce2(vector<int> &v, int p, int q)
+void reduce2(vector<int> &v, int p, int q, int step=1)
 {
-    int n = 1, i, j, k;
+    int n = step, i, j, k;
     while(n < q-p+1) {
         for (i=p ; i<=q; i+=n*2) {
             j = i + n - 1;
@@ -53,9 +62,10 @@ int main()
 {
     int i;
     vector<int> v;
+    v.reserve(100);
     while(cin >> i) v.push_back(i);
-    for (const auto &i:v) cout << i << ' '; cout << endl; 
+    cnt = 0;
     reduce2(v, 0, v.size()-1);
-    for (const auto &i:v) cout << i << ' '; cout << endl; 
+    cout << "inversion pairs: " << cnt << endl;
     return 0;
 }
