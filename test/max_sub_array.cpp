@@ -55,9 +55,32 @@ area find_max_sub_array(const vector<int> &array, int begin, int end)
     right = find_max_sub_array(array, mid+1, end);
     across_mid = find_across_mid(array, begin, mid, end);
     
-    if (left.sum > right.sum && left.sum > across_mid.sum) return left;
-    else if (right.sum > left.sum && right.sum > across_mid.sum) return right;
+    if (left.sum >= right.sum && left.sum >= across_mid.sum) return left;
+    else if (right.sum >= left.sum && right.sum >= across_mid.sum) return right;
     return across_mid;
+}
+
+area find_max_sub_array_O_n(vector<int> array, int begin, int end)
+{
+    area a;
+    if (begin > end) return a;
+    int i, next_begin=0, sum=0;
+
+    a.sum = 1<<31;
+    for (i=0; i<=end-begin; ++i) {
+        sum += array[i];
+        if (a.sum < sum) {
+            a.sum = sum;
+            a.end = i;
+            a.begin = next_begin;
+        }
+        if (sum<0 && i!=end-begin) {
+            a.sum = 1<<31;
+            sum = 0;
+            next_begin = i+1;
+        }
+    }
+    return a;
 }
 
 int main()
@@ -67,6 +90,7 @@ int main()
     array.reserve(100);
     while(cin >> integer) array.push_back(integer);
     
+    //area a=find_max_sub_array_O_n(array, 0, array.size()-1);
     area a=find_max_sub_array(array, 0, array.size()-1);
 
     integer = 0;
