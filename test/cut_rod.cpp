@@ -8,6 +8,8 @@
 #include <iostream>
 #include <vector>
 using namespace std;
+#define MAX_SIZE_R 100
+#define FIXED_COST 2
 
 int cut_rod(vector<int> p, int n)
 {
@@ -38,7 +40,7 @@ int memorized_cut_rod_auxiliary(const vector<int> &p, int n,
     r[n] = q;
     return q;
 }
-#define MAX_SIZE_R 100
+
 int memorized_cut_rod(const vector<int> &p, int n)
 {
     vector<int> r; r.reserve(MAX_SIZE_R);
@@ -68,6 +70,7 @@ int bottom_up_cut_rod(const vector<int> &p, unsigned n)
         int price = 1<<31;
         for (j = 1; j<=i; ++j) {
             int temp = p[j] + r[i-j];
+            if (i-j) temp -= FIXED_COST;
             if (price < temp) {
                 price = temp;
                 s[i] = j;

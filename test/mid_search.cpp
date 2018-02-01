@@ -28,7 +28,6 @@ int iteration(vector<int> &array, int beg, int end, int value)
     if(beg > end) return -1;
 
     int mid = (beg+end) / 2;
-    //cout << array[mid] << endl;
     if(array[mid] == value)
         return mid;
     if(array[mid] < value)
@@ -37,15 +36,22 @@ int iteration(vector<int> &array, int beg, int end, int value)
         return iteration(array,beg,mid-1,value);
 }
 
-int main()
+int main(int argc, char **)
 {
-    vector<int> array{1,2,3,4,5,6,19,80,1023};
+    if (argc !=2) {
+        cout << "Usage: elf filename(which contains numbers" 
+            << " FOR EXAMPLE: 1 2 3 4 5 6 ...)" << endl;
+        cout << "\n this elf file NOT complete!\n" << endl;
+        return -1;
+    }
+    vector<int> array;
     int loc, value;
     cin >> value;
     loc = circulation(array,value);
     //loc = iteration(array,0,array.size()-1,value);
     if (loc!=-1)
-        cout << "The location of the " << value << " in global array is " << loc << ", value is " << array[loc] << endl; 
+        cout << "The location of the " << value 
+        << " in global array is " << loc << ", value is " << array[loc] << endl; 
     else
         cout << value << " NOT IN global array..." << endl; 
     return 0;
