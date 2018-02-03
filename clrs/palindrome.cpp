@@ -1,5 +1,5 @@
 /************************************************************************
-****	> File Name:    	parlindrome.cpp
+****	> File Name:    	palindrome.cpp
 ****	> Author:       	yiwen liu
 ****	> Mail:         	newiyuil@163.com
 ****	> Created Time: 	Thu 01 Feb 2018 01:16:50 PM CST
@@ -11,7 +11,7 @@
 using namespace std;
 
 template <typename T>
-void max_parlindrome(const vector<T> &s, vector<vector<int>> &m)
+void max_palindrome(const vector<T> &s, vector<vector<int>> &m)
 {
     int i, j;
     const int last = s.size()-1, first = 0;
@@ -36,7 +36,7 @@ void max_parlindrome(const vector<T> &s, vector<vector<int>> &m)
 }
 
 template <typename T>
-void print_parlindrome(const vector<T> &s,
+void print_palindrome(const vector<T> &s,
                        const vector<vector<int>> &m, int i, int j)
 {
     if (i>j) return;
@@ -50,14 +50,14 @@ void print_parlindrome(const vector<T> &s,
     }
 
     if (m[i][j] == m[i][j-1]) {
-        print_parlindrome<T>(s, m, i, j-1);
+        print_palindrome<T>(s, m, i, j-1);
     }
     else if(m[i][j] == m[i+1][j] ) {
-        print_parlindrome<T>(s, m, i+1, j);
+        print_palindrome<T>(s, m, i+1, j);
     }
     else if (m[i][j] == m[i+1][j-1] + 1 ) {
         cout << s[i] << ' ';
-        print_parlindrome<T>(s, m, i+1, j-1);
+        print_palindrome<T>(s, m, i+1, j-1);
         cout << s[i] << ' ';
     }
 }
@@ -87,11 +87,11 @@ int main()
         s.push_back(type_var);
     }
 
-    max_parlindrome(s, m);
+    max_palindrome(s, m);
 
-    cout << "max parlindrome length is: " << m[0][s.size()-1] 
-        << "\n\t" << "parlindrome sequence is : ";
-    print_parlindrome(s, m, 0, s.size()-1);
+    cout << "max palindrome length is: " << m[0][s.size()-1] 
+        << "\n\t" << "palindrome sequence is : ";
+    print_palindrome(s, m, 0, s.size()-1);
     cout << endl;
 
     /*disp_vector_m(m);*/
