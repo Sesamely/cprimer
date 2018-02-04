@@ -5,15 +5,17 @@
 ****	> Created Time: 	Sat 03 Feb 2018 09:46:31 PM CST
 ************************************************************************/
 
-#include "./adjacent_graph.h"
 
+#include <iostream>
+#include <ctime>
+#include <typeinfo>
 using namespace std;
 
 int main()
 {
-    adjacent_list adj;
-    get_adjacent_list(cin, adj);
-    disp_adj(adj);
-
+    time_t timer;
+    time(&timer);
+    cout << typeid(timer).name() << " " << timer << endl;
+    cout << asctime(localtime(&timer)) << endl;
     return 0;
 }

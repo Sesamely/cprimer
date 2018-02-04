@@ -9,7 +9,7 @@
 #include <vector>
 using namespace std;
 #define MAX_SIZE_R 100
-#define FIXED_COST 2
+#define FIXED_COST 0
 
 int cut_rod(vector<int> p, int n)
 {

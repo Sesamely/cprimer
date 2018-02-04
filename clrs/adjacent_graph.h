@@ -15,6 +15,7 @@
 #include <map>
 using namespace std;
 
+
 enum color {
     WHITE, GRAY, BLACK
 };
@@ -22,10 +23,11 @@ struct vertex {
     const int key;
     color c;
     int d;
+    int f;
     vertex *pre_v;
 
     vertex() = default;
-    vertex(int k, color color) : key(k), c(color), d(0),
+    vertex(int k, color color) : key(k), c(color), d(0), f(0),
                                 pre_v(nullptr) {}
 
     bool operator<(const vertex other_v) const {
@@ -59,6 +61,10 @@ struct adjacent_list {
         return true;
     }
 };
+
+/*Global variables*/
+int cur_time;
+forward_list<vertex *> list_for_topologic;
 
 void disp_adj(adjacent_list &adj)
 {
