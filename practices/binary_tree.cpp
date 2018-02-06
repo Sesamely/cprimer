@@ -154,12 +154,66 @@ void completeDisp(BinaryTree *node)
     cout << endl;
 }/*}}}*/
 
+bool has_same_struct(BinaryTree *root1, BinaryTree *root2) {
+    if (root2 == nullptr) return true;
+    if (root1 == nullptr) return false;
+
+    if (root1->data != root2->data) return false;
+
+    return has_same_struct(root1->left, root2->left) &&
+            has_same_struct(root1->right, root2->right);
+}
+BinaryTree *find_same_structure(BinaryTree *demo, BinaryTree *sub) {
+    if (demo == nullptr || sub == nullptr) return nullptr;
+
+    BinaryTree *result_ptr = nullptr;
+    bool result = false;
+    if (demo->data == sub->data) {
+        result_ptr = demo;
+        result = has_same_struct(demo, sub);
+    }
+    if (!result) {
+        result_ptr = find_same_structure(demo->left, sub);
+        if (result_ptr) result = true;
+    }
+    if (!result) 
+        result_ptr = find_same_structure(demo->right, sub);
+
+    return result_ptr;
+}
+
+BinaryTree *copy(BinaryTree *node) {
+    if (!node) return nullptr;
+    BinaryTree *temp_node = new BinaryTree();
+    temp_node->data = node->data;
+    temp_node->left = copy(node->left);
+    temp_node->right = copy(node->right);
+
+    return temp_node;
+}
+void mirror(BinaryTree *node) {
+    if (!node) return;
+    swap(node->left, node->right);
+    mirror(node->left);
+    mirror(node->right);
+}
+void mirror_iterative(BinaryTree *node) {
+    while (node) {
+        swap(node->left, node->right);
+        mirror(node->left);
+        node = node->right;
+    }
+}
+
 int main()
 {
-    vector<int> pre{1,2,4,7,3,5,6,8};
-    vector<int> mid{4,7,2,1,5,3,8,6};
+    vector<int> pre{1,10,11,12,13}, pre1{8,9,2};
+    vector<int> mid{1,10,11,12,13}, mid1{9,8,2};
     BinaryTree *root = reconstrucrTree(pre,mid);
-    printPretty(root, 1, 5);
+    BinaryTree *root1 = copy(root);
 
+    printPretty(root, 1, 3);
+    mirror_iterative(root1);
+    printPretty(root1, 1, 3);
     return 0;
 }
