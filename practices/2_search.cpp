@@ -8,8 +8,6 @@
 #include<iostream>
 using namespace std;
 
-vector<int> array{1,2,3,4,5,6,19,80,1023};
-
 int circulation(vector<int> &array, int value)
 {
     int i=0,j=array.size()-1,mid;
@@ -38,6 +36,8 @@ int iteration(vector<int> &array, int beg, int end, int value)
         return iteration(array,beg,mid-1,value);
 }
 
+/*global variable*/
+vector<int> array{1,2,3,4,5,6,19,80,1023};
 int main()
 {
     int loc, value;

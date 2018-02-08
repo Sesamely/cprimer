@@ -66,7 +66,7 @@ int main()
     while(cin >> i) v.push_back(i);
     cnt = 0;
     reduce2(v, 0, v.size()-1);
-    /*cout << "inversion pairs: " << cnt << endl;*/
+    cout << "inversion pairs: " << cnt << endl;
     for (const auto &i : v) cout << i << " "; cout << endl;
     return 0;
 }

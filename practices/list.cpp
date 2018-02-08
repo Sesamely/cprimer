@@ -43,9 +43,9 @@ void delete_node(ListNode **phead, ListNode *to_delete)
     }
 }
 
-void disp(ListNode **head) {
+void disp(ListNode *head) {
     if (head == nullptr) return;
-    ListNode *p = *head;
+    ListNode *p = head;
     while(p) {
         cout << p->m_nValue << " ";
         p=p->m_pNext;
@@ -124,7 +124,68 @@ ListNode *create_list(vector<int> v_int) {
     if (head) tail->m_pNext = nullptr;
     return head;
 }
+/*this algorithm is NOT effective*/
+ListNode *first_common(ListNode *l1, ListNode *l2) {
+    if (l1==nullptr || l2==nullptr) return nullptr;
+    
+    if (l1 == l2) return l1;
+    else {
+        ListNode *common = nullptr;
+        common = first_common(l1->m_pNext, l2);
+        if (!common) common = first_common(l1, l2->m_pNext);
+        return common;
+    }
+}
+ListNode *first_common_O_m(ListNode *l1, ListNode *l2) {
+    if (l1 == nullptr || l2 == nullptr) return nullptr;
 
+    int l1_length=0, l2_length=0;
+    ListNode *p;
+    for (p=l1; p!=nullptr; p=p->m_pNext) ++l1_length;
+    for (p=l2; p!=nullptr; p=p->m_pNext) ++l2_length;
+
+    while (l1_length < l2_length) {
+        if (l2->m_nValue == l1->m_nValue) return l2;
+        else l2 = l2->m_pNext;
+    }
+    while (l1_length > l2_length) {
+        if (l2->m_nValue == l1->m_nValue) return l1;
+        else l1 = l1->m_pNext;
+    }
+
+    while (l1 && l2) {
+        if (l1->m_nValue == l2->m_nValue) return l2;
+        l1 = l1->m_pNext;
+        l2 = l2->m_pNext;
+    }
+
+    return nullptr;
+}
+ListNode *first_value_discommon(ListNode *l1, ListNode *l2) {
+    if (l1 == nullptr && l2 == nullptr) return nullptr;
+    if (l1 == nullptr) return l2;
+    if (l2 == nullptr) return l1;
+
+    if (l1->m_nValue != l2->m_nValue)  return l1;
+    else return first_value_discommon(l1->m_pNext, l2->m_pNext);
+}
+
+ListNode *ptr_of_value(int value, ListNode *root) {
+    ListNode *p = root;
+    while (p) {
+        if (p->m_nValue == value) return p;
+        p = p->m_pNext;
+    }
+
+    return nullptr;
+}
+void delete_list_recursive(ListNode *node) {
+    if (node) {
+        delete_list_recursive(node->m_pNext);
+        cout << "delete " << node->m_nValue << endl;
+        delete node;
+    }
+}
 int main()
 {
     int i ;
@@ -134,13 +195,26 @@ int main()
         if (!i) break;
         v_int.push_back(i);
     }
-    while (cin >> i) v_int1.push_back(i);
-    
+    while (cin >> i) {
+        if (!i) break;
+        v_int1.push_back(i);
+    }
+    cin >> i; 
+
     ListNode *head, *head1;
     head = create_list(v_int);
     head1 = create_list(v_int1);
 
-    disp(merge(head, head1));
+    /*
+     *disp(head);
+     *if (ptr_of_value(i, head)) {
+     *    delete_list_recursive(ptr_of_value(i, head)->m_pNext);
+     *    ptr_of_value(i, head)->m_pNext = ptr_of_value(i, head1);
+     *}
+     *disp(head);
+     *disp(head1);
+     *disp(first_common_O_m(head1, head));
+     */
 
     return 0;
 }

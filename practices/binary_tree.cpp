@@ -71,7 +71,7 @@ void printLeaves(int indentSpace, int level, int nodesInThisLevel, const deque<B
 // @ param
 // level  Control how wide you want the tree to sparse (eg, level 1 has the minimum space between nodes, while level 2 has a larger space between nodes)
 // indentSpace  Change this to add some indent space to the left (eg, indentSpace of 0 means the lowest level of the left node will stick to the left margin)
-void printPretty(BinaryTree *root, int level, int indentSpace, ostream& out=cout) {
+void printPretty(BinaryTree *root, int level=1, int indentSpace=4, ostream& out=cout) {
   int h = maxHeight(root);
   int nodesInThisLevel = 1;
 
@@ -106,7 +106,7 @@ void printPretty(BinaryTree *root, int level, int indentSpace, ostream& out=cout
 }
 /*}}}*/
 
-BinaryTree *reconstrucrTree(vector<int> &pre,vector<int> &mid)
+BinaryTree *reconstrucrTree(vector<int> &pre,vector<int> &mid)/*{{{*/
 {
     if(!pre.size()) return NULL;
     
@@ -128,7 +128,7 @@ BinaryTree *reconstrucrTree(vector<int> &pre,vector<int> &mid)
     temp->right = reconstrucrTree(tempPre2,tempMid2);
 
     return temp;
-}
+}/*}}}*/
 
 void disp(BinaryTree *node)/*{{{*/
 {
@@ -154,14 +154,14 @@ void completeDisp(BinaryTree *node)
     cout << endl;
 }/*}}}*/
 
-bool has_same_struct(BinaryTree *root1, BinaryTree *root2) {
+bool has_same_sub_structure(BinaryTree *root1, BinaryTree *root2) {
     if (root2 == nullptr) return true;
     if (root1 == nullptr) return false;
 
     if (root1->data != root2->data) return false;
 
-    return has_same_struct(root1->left, root2->left) &&
-            has_same_struct(root1->right, root2->right);
+    return has_same_sub_structure(root1->left, root2->left) &&
+            has_same_sub_structure(root1->right, root2->right);
 }
 BinaryTree *find_same_structure(BinaryTree *demo, BinaryTree *sub) {
     if (demo == nullptr || sub == nullptr) return nullptr;
@@ -170,7 +170,7 @@ BinaryTree *find_same_structure(BinaryTree *demo, BinaryTree *sub) {
     bool result = false;
     if (demo->data == sub->data) {
         result_ptr = demo;
-        result = has_same_struct(demo, sub);
+        result = has_same_sub_structure(demo, sub);
     }
     if (!result) {
         result_ptr = find_same_structure(demo->left, sub);
@@ -205,15 +205,115 @@ void mirror_iterative(BinaryTree *node) {
     }
 }
 
+/*this is not simple enough*/
+BinaryTree *binaryTree_to_2direction_list(BinaryTree *node)
+{
+    if (node == nullptr) return nullptr;
+
+    BinaryTree *left_head, *left_tail, *right_head, *right_tail;
+
+    left_head = binaryTree_to_2direction_list(node->left);
+    right_head = binaryTree_to_2direction_list(node->right);
+
+    if (left_head == nullptr && right_head != nullptr) {
+        right_tail = right_head->left;
+
+        node->right = right_head; 
+        node->left = right_tail;
+        right_head->left = node;
+        right_tail->right = node;
+
+        return node;
+    }
+    else if (right_head == nullptr && left_head != nullptr) {
+        left_tail = right_head->left;
+        node->right = left_head;
+        node->left = left_tail;
+        left_tail->right = node;
+        left_head->left = node;
+
+        return left_head;
+    }
+    else if (left_head == nullptr && right_head == nullptr) {
+        node->left = node->right = node;
+
+        return node;
+    }
+    else {
+        left_tail = left_head->left;
+        right_tail = right_head->left;
+
+        node->left = left_tail;
+        node->right = right_head;
+        left_tail->right = node;
+        right_head->left = node;
+        left_head->left = right_tail;
+        right_tail->right = left_head;
+
+        return left_head;
+    }
+}
+void ConvertNode(BinaryTree *p_node, BinaryTree **p_last_node_in_list) {
+    if (!p_node) return;
+
+    BinaryTree *p_cur = p_node;
+
+    ConvertNode(p_node->left, p_last_node_in_list);
+    p_cur->left = *p_last_node_in_list;
+    if (*p_last_node_in_list) (*p_last_node_in_list)->right = p_cur;
+
+    *p_last_node_in_list = p_cur;
+    ConvertNode(p_node->right, p_last_node_in_list);
+}
+BinaryTree * Convert(BinaryTree *p_root_of_tree) {
+    BinaryTree *p_last_node_in_list = nullptr;
+    ConvertNode(p_root_of_tree, &p_last_node_in_list);
+
+    BinaryTree *p_head_of_list = p_last_node_in_list;
+    while (p_head_of_list != nullptr && p_head_of_list->left != nullptr) 
+        p_head_of_list = p_head_of_list->left;
+
+    return p_head_of_list;
+}
+void disp_2d_list(BinaryTree *root) {
+    if (!root) return;
+    BinaryTree *node = root;
+    cout << node->data << " ";
+    node = node->right;
+    while (node && node != root) {
+        cout << node->data << " ";
+        node = node->right;
+    }
+    cout << endl;
+}
+
+void disp_depth_of(BinaryTree *node, int &depth)
+{
+    if (node == nullptr) {
+        depth = -1;
+        return;
+    }
+    int left_depth, right_depth;
+    disp_depth_of(node->left, left_depth);
+    disp_depth_of(node->right, right_depth);
+
+    depth = left_depth > right_depth ? left_depth + 1 : right_depth + 1;
+    cout << "value is: " << node->data << " and depth is: " << depth << endl; 
+}
+
 int main()
 {
-    vector<int> pre{1,10,11,12,13}, pre1{8,9,2};
-    vector<int> mid{1,10,11,12,13}, mid1{9,8,2};
+    vector<int> pre, mid;
+    int i;
+    while (cin >> i) {
+        if (!i) break;
+        pre.push_back(i);
+    }
+    while (cin >> i) mid.push_back(i);
     BinaryTree *root = reconstrucrTree(pre,mid);
-    BinaryTree *root1 = copy(root);
 
-    printPretty(root, 1, 3);
-    mirror_iterative(root1);
-    printPretty(root1, 1, 3);
+    printPretty(root);
+    disp_2d_list(Convert(root));
+
     return 0;
 }

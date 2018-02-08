@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <vector>
+#include <cassert>
 using namespace std;
 
 struct area {
@@ -83,7 +84,51 @@ area find_max_sub_array_O_n(vector<int> array, int begin, int end)
     return a;
 }
 
-int main()
+int find_max_sub_array_dp_aux(const vector<int> &a, int i, 
+                              vector<int> &c,
+                                vector<int> &s) 
+{
+    assert(i>=0);
+    if (c[i] != -1) return c[i];
+    if (i==0) {
+        c[0] = a[0];
+        return c[i];
+    }
+
+    int pre = find_max_sub_array_dp_aux(a, i-1, c, s);
+    if (pre<=0) {
+        c[i] = a[i];
+    }
+    else {
+        c[i] = a[i] + pre;
+        s[i] = s[i-1] + 1;
+    }
+
+    return c[i];
+}
+void find_max_sub_array_dp(vector<int> a) {
+    vector<int> c, s;
+    c.assign(a.size(), -1);
+    s.assign(a.size(), 1);
+
+    find_max_sub_array_dp_aux(a, a.size()-1, c, s);
+
+    int max = 1<<31, max_loc = -1;
+    for (int i=0; i<int(c.size()); ++i) {
+        if (c[i] > max) {
+            max = c[i];
+            max_loc = i;
+        }
+    }
+    if (max_loc != -1) {
+        cout << "max is: " << max
+            << "\trange is: [ " << max_loc-s[max_loc]+1
+            << " , " << max_loc << " ]" << endl;
+    }    
+    else cout << "empty array!" << endl;
+}
+
+int main1()
 {
     int integer;
     vector<int> array;
@@ -107,4 +152,13 @@ int main()
 
     return 0;
 }
+int main()
+{
+    vector<int> a;
+    int i;
+    while (cin >> i) a.push_back(i);
 
+    find_max_sub_array_dp(a);
+
+    return 0;
+}

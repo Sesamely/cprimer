@@ -7,7 +7,7 @@
 
 #include <iostream>
 #include <vector>
-#include <string>
+#include <iomanip>
 using namespace std;
 
 using number_type = string;
@@ -44,15 +44,19 @@ public:
     }
 };
 
+int cnt = 0;
 void print_bn(const bignumber &bn)
 {
+    if (!(++cnt % 11)) {
+        cout << endl;
+    }
     unsigned index=~(0);
     while(++index<bn.size() && bn[index]==0);
 
+    cout << setw(2);
     for (; index<bn.size(); ++index) {
         cout << bn[index];
     }
-    cout << " ";
 }
 void bn_print_f_1_to_n_auxiliary(bignumber &bn, int index);
 void bn_print_f_1_to_n(int n)
