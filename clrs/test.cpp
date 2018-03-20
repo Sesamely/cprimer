@@ -7,16 +7,31 @@
 
 
 #include <iostream>
-#include <ctime>
-#include <typeinfo>
 #include <algorithm>
-#include <string>
 using namespace std;
 
 int main()
 {
-    string s("12425235");
-    for_each(s.cbegin(), s.cend(), [](const char &i){cout << (int)i-48 << " ";});
-    cout << endl;
+    int n, i, temp;
+    cin >> n;
+    vector<int> v, distance; 
+    v.reserve(n); distance.reserve(n);
+    for (i=0; i<n; ++i) {
+        cin >> temp;
+        v.push_back(temp);
+    }
+    sort(v.begin(), v.end());
+
+    for (i=0; i<n-1; ++i) {
+        int abs = v[i+1] - v[i];
+        if (abs < 0) abs = -abs;
+        distance.push_back(abs);
+    }
+    int min = ~(1<<31);
+    for (const auto &i : distance) 
+        cout << i << " ";
+        if (i < min) min = i;
+
+    cout << min << endl;
     return 0;
 }

@@ -1,0 +1,95 @@
+/************************************************************************
+****	> File Name:    	Markdown_to_Html.cpp
+****	> Author:       	yiwen liu
+****	> Mail:         	newiyuil@163.com
+****	> Created Time: 	2018年03月17日 星期六 13时20分56秒
+************************************************************************/
+
+#include <iostream>
+#include <sstream>
+using namespace std;
+
+int main()
+{
+    ostringstream out;
+    string line;
+    enum statement_type {
+        p, h,
+        em, ul, A, null
+    };
+    statement_type pre_statement_is =null;
+    statement_type this_statement_is = null;
+    while(getline(cin, line)) {
+        pre_statement_is = this_statement_is;
+        //judge the statement is ""
+        if (line == "") {
+            this_statement_is = null;
+            if (pre_statement_is == A) {
+                out << "<A>\n";
+            } else if (pre_statement_is == ul) {
+                out << "<ul>\n";
+            } else if (pre_statement_is == p) {
+                out << "<p>\n";
+            }
+            continue;
+        }
+        //judge the statement_type
+        string temp_line = line;
+        int line_char_number =  line.size();
+        this_statement_is = p;
+        for (int i=0; i<line_char_number; ++i) 
+        {
+            char cur_char = line[i];
+            if (cur_char == '#') 
+            {
+                this_statement_is = h;
+            } else if (cur_char == '*') 
+            {
+                this_statement_is = ul;
+            } else if (cur_char == '_') 
+            {
+                this_statement_is = em;
+            } else if (cur_char == ']') 
+            {
+                this_statement_is = A;
+            }
+            
+            if (this_statement_is != p) break;
+        }
+
+
+        int head_number = 0;
+        if (this_statement_is == p) {
+            if (pre_statement_is != p) {
+                out << "<p>" << line;
+            } else {
+                out << "\n" <<line;
+            }
+        }
+        if (this_statement_is == h) {
+            for (int i=0; i<line_char_number; ++i) {
+                if (line[i] == '#') ++head_number;
+            }
+            out << "<h" << head_number << ">" << line
+                << "</h" << head_number << ">" << "\n";
+        }
+        
+        if (this_statement_is == em) {
+            int i;
+            for (i=0; i<line_char_number; ++i) {
+                out << line[i] ;
+                if (line[i] == '_') break;
+            }
+            out << "<em>";
+            int loc;
+            for (loc=i+1; line[loc]!='_'; ++loc) {
+                out << line[loc];
+            }
+            out << "</em>"
+            for (++loc; loc<line_char_number; ++loc) {
+                out << line
+            }
+        }
+        
+    }
+}

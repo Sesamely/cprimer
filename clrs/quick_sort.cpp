@@ -65,12 +65,28 @@ void quick_sort(vector<int> &v, int begin, int end) {
 
 int main()
 {
-    int temp;
-    vector<int> v; v.reserve(100);
-    while(cin >> temp) v.push_back(temp); 
+    int temp, n;
+    cin >> n;
+    vector<int> v; v.reserve(n);
+    for (int i = 0; i<n; ++i) {
+        cin >> temp;
+        v.push_back(temp);
+    }
 
     quick_sort(v, 0, v.size()-1);
-    for (const auto &i : v) cout << i << ' '; cout << endl;
 
+    vector<int> dist; dist.assign(n-1,0);
+    for (int i=0; i<=n-2; ++i) {
+        int res = v[i] - v[i+1];
+        if (res < 0) res = -res;
+        dist[i] = res;
+    }
+    
+    int min = ~(1<<31);
+    for (int i=0; i<n-1; ++i) {
+        if (dist[i] < min) min = dist[i];
+    }
+
+    cout << min;
     return 0;
 }
