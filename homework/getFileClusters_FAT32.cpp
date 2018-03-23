@@ -141,33 +141,25 @@ void get_clusterList_by_firstClusterNumber(number_type cluster_number,
 
 void extend_file_name(const char *src, char *des)
 { 
-    int des_size = strlen(src);
-    des[11] = '\0';
-    int add_zero_number = 11 - des_size;
-    int loc = 0;
-    int argv1_loc = 0;
-    for (; loc<11&&argv1_loc<des_size;) {
-        if (src[argv1_loc] != '.') {
-            if (src[argv1_loc] >= 'a' && src[argv1_loc] <= 'z')
-                des[loc] = src[argv1_loc] - 'a' + 'A';
-            else {
-                des[loc] = src[argv1_loc];
+    int i = 0,
+        j = 0;
+    for (; src[i]!='\0'; ++i,++j) {
+        if (src[i] == '.') {
+            for(; j!=8; ++j) {
+                des[j] = 0x20;
             }
+            --j;
         } else {
-            int k=0;
-            for (; k<add_zero_number; ++k) {
-                des[loc] = 0x20;
-                ++loc;
+            if (src[i] >= 'a' && src[i] <= 'z') {
+                des[j] = src[i] - 'a' + 'A';
+            } else {
+                des[j] = src[i];
             }
-            des[loc] = 0x20;
         }
-        ++loc;
-        ++argv1_loc;
     }
-    while (loc<11) {
-        des[loc] = 0x20;
-        ++loc;
-    }
+    for (;j<11; ++j) {
+        des[j] = 0x20;
+    } 
 }
 //use this func, make sure filename is WIN32 legally char and short name format
 number_type get_fileFirstClusterNumber_by_fatherClusterList_and_filename(
@@ -178,7 +170,7 @@ number_type get_fileFirstClusterNumber_by_fatherClusterList_and_filename(
     char extend_filename[12];
     extend_filename[11] = 0;
     extend_file_name(filename, extend_filename);
-    /*cout << extend_filename << endl;*/
+    //cout << extend_filename << endl;
 
     int cluster_list_size = cluster_list.size();
     for (int i=0; i<cluster_list_size; ++i) {
@@ -267,7 +259,7 @@ void getFileCluster_FAT32(const string &absolute_filename, const string &device)
 
 void print_help() {
     cout << "Usage:\n";
-    cout << "\telf_name -d device filename\n";
+    cout << "\tgetFileClusters_FAT32 -d device filename\n";
     cout << "\n\n";
     cout << "Description:\n";
     cout << "\t显示device(一个FAT32的分区)中绝对路径为filename的文件的簇链，以及查找的过程\n";
@@ -285,7 +277,7 @@ int main(int argc, char **argv)
     }
 
     if (strcmp(argv[1], "-d")) {
-        cout << "Uknow option '-d'!" << "\n\n" << endl;
+        cout << "\n\tUknow option '" << argv[1] << "' !\n\n" << endl;
         print_help();
         return 0;
     }
