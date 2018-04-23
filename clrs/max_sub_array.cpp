@@ -68,7 +68,7 @@ area find_max_sub_array_O_n(vector<int> array, int begin, int end)
     int i, next_begin=0, sum=0;
 
     a.sum = 1<<31;
-    for (i=0; i<=end-begin; ++i) {
+    for (i=begin; i<=end; ++i) {
         sum += array[i];
         if (a.sum < sum) {
             a.sum = sum;
@@ -76,7 +76,7 @@ area find_max_sub_array_O_n(vector<int> array, int begin, int end)
             a.begin = next_begin;
         }
         if (sum<0 && i!=end-begin) {
-            a.sum = 1<<31;
+            /*a.sum = 1<<31;*/
             sum = 0;
             next_begin = i+1;
         }
@@ -128,35 +128,47 @@ void find_max_sub_array_dp(vector<int> a) {
     else cout << "empty array!" << endl;
 }
 
-int main1()
+int main()
 {
     int integer;
     vector<int> array;
     array.reserve(100);
-    while(cin >> integer) array.push_back(integer);
-    
-    //area a=find_max_sub_array_O_n(array, 0, array.size()-1);
-    area a=find_max_sub_array(array, 0, array.size()-1);
-
-    integer = 0;
-    for (int i = 0; i<static_cast<int>(array.size()); ++i) {
-        if (i == a.begin) cout << "{";
-        cout << array[i];
-        if (i == a.end) cout << "} ";
-        else cout << " ";
-        ++integer;
-        if (integer % 20 == 0) cout << endl;
+    while(cin >> integer) {
+        array.push_back(integer);
+        /*
+         *char temp;
+         *cin >> temp;
+         */
     }
-    cout << "\nleft boundary is: " << a.begin << ". right boundary is: " << a.end
-        << ". max_sub_array's sum is: " << a.sum << "." << endl;
+    
+    area a=find_max_sub_array_O_n(array, 0, array.size()-1);
+    //area a=find_max_sub_array(array, 0, array.size()-1);
+
+/*
+ *    integer = 0;
+ *    for (int i = 0; i<static_cast<int>(array.size()); ++i) {
+ *        if (i == a.begin) cout << "{";
+ *        cout << array[i];
+ *        if (i == a.end) cout << "} ";
+ *        else cout << " ";
+ *        ++integer;
+ *        if (integer % 20 == 0) cout << endl;
+ *    }
+ *
+ */
+    cout << a.sum << endl;
 
     return 0;
 }
-int main()
+int main1()
 {
     vector<int> a;
     int i;
-    while (cin >> i) a.push_back(i);
+    while (cin >> i) {
+        a.push_back(i);
+        char temp;
+        cin >> temp;
+    }
 
     find_max_sub_array_dp(a);
 
